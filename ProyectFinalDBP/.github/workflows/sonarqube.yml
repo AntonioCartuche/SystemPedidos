@@ -27,8 +27,13 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        sonar-scanner
-        -Dsonar.projectKey=SystemPedidos \
-        -Dsonar.sources=. \
-        -Dsonar.host.url=http://localhost:9000 \
-        -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        sonar-scanner \
+          -Dsonar.projectKey=SystemPedidos \
+          -Dsonar.sources=.\
+          -Dsonar.host.url=http://localhost:9000 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+    - name: Notify Slack
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"⚠️ SonarQube analysis failed in branch ${{ github.ref }}. Please check the details in the [GitHub Actions logs](${{ github.run_url }})."}' ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -15,3 +15,9 @@ jobs:
 
     - name: Run JMeter tests
       run: jmeter -n -t test-plan.jmx -l results.jtl -e -o results
+
+    - name: Notify Slack
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"⚠️ JMeter tests failed in branch ${{ github.ref }}. Please check the details in the [GitHub Actions logs](${{ github.run_url }})."}' ${{ secrets.SLACK_WEBHOOK_URL }}
+S

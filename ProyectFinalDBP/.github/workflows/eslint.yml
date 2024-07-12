@@ -20,3 +20,8 @@ jobs:
 
     - name: Run ESLint
       run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+    - name: Notify Slack
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"⚠️ ESLint analysis failed in branch ${{ github.ref }}. Please check the details in the [GitHub Actions logs](${{ github.run_url }})."}' ${{ secrets.SLACK_WEBHOOK_URL }}
