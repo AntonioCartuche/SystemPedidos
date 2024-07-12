@@ -35,6 +35,17 @@ def pagPrincipal(request):
     return render(request, "index.html", {'data': location_data,'productos': productos })
 
 
+def pagPrincipal2(request):
+    productos = Producto.objects.all()
+    ip = requests.get('https://api.ipify.org?format=json')
+    ip_data = json.loads(ip.text)
+    res = requests.get('http://ip-api.com/json/' + ip_data["ip"])
+    location_data_one = res.text
+    location_data = json.loads(location_data_one)
+    return render(request, "index.html", {'data': location_data,'productos': productos })
+
+
+
 def pagCarrito(request):
     return render(request, "cart.html", {})
 
