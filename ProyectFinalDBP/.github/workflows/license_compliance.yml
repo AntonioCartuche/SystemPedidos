@@ -1,0 +1,31 @@
+name: License Compliance for Django
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run license compliance check
+        uses: johndoe/action-license-compliance@v1
+        with:
+          allowed-licenses: MIT, Apache-2.0, BSD-3-Clause
+          block-on-violation: true
